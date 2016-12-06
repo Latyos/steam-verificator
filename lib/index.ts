@@ -9,12 +9,6 @@ export enum Trigger {
 	Manual = 2
 }
 
-export enum VerificationResult {
-	Valid = 0,
-	CodeIncorrect = 1,
-	CodeNotIssued = 2
-}
-
 interface triggerOptions {
 	ignoredUsers: string[];
 	secondService: string; // i.e: "My Awesome Website"
@@ -59,18 +53,21 @@ export class Verificator {
 		}
 	}
 
-	public verify(verification: verification): VerificationResult {
-		let i = this.pendingVerifications.map(e => { return e.user }).indexOf(verification.user);
+	/**
+	 * Verifies the validity of a code.
+	 * Returns the user's Steam ID if it's valid, or null if it isn't.
+	 * @param code The issued code.
+	 * @return {string|null} The user's steam ID or null.
+	 */
+	public verify(code: string): string {
+		let i = this.pendingVerifications.map(e => { return e.code }).indexOf(code);
 
 		if (i !== -1) {
-			if (this.pendingVerifications[i].code === verification.code) {
-				this.pendingVerifications.splice(i, 1);
-				return VerificationResult.Valid;
-			} else {
-				return VerificationResult.CodeIncorrect;
-			}
+			let user = this.pendingVerifications[i].user;
+			this.pendingVerifications.splice(i, 1);
+			return user;
 		} else {
-			return VerificationResult.CodeNotIssued;
+			return null;
 		}
 	}
 

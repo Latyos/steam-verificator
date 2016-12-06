@@ -37,22 +37,14 @@ let verificator = new steamVerificator.Verificator({
 // Because the Verificator is using Trigger.FriendRequest, whenever an user adds the bot,
 // it will send back the code to them. After the user passes back the code:
 
-function onUserCodeEnter(userSteamID, code) {
-	let result = verificator.verify({
-		user: userSteamID,
-		code: code
-	});
+function onUserCodeEnter(code) {
+	let steamID = verificator.verify(code);
 	
-	switch (result) {
-		case steamVerificator.VerificationResult.Valid:
-			// The steam account is verified.
-			break;
-		case steamVerificator.VerificationResult.CodeIncorrect:
-			// The user was sent a code, but the code entered by them is not correct.
-			break;
-		case steamVerificator.VerificationResult.CodeNotIssued:
-			// The user was never sent a code.
-			break;
+	if (steamID !== null) {
+	    // Verification process successful.
+	    // steamID is the user's steam id.
+	} else {
+	    // Verification process failed.
 	}
 }
 ```

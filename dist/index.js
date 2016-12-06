@@ -6,12 +6,6 @@ var sprintf = require("sprintf-js").sprintf;
     Trigger[Trigger["Manual"] = 2] = "Manual";
 })(exports.Trigger || (exports.Trigger = {}));
 var Trigger = exports.Trigger;
-(function (VerificationResult) {
-    VerificationResult[VerificationResult["Valid"] = 0] = "Valid";
-    VerificationResult[VerificationResult["CodeIncorrect"] = 1] = "CodeIncorrect";
-    VerificationResult[VerificationResult["CodeNotIssued"] = 2] = "CodeNotIssued";
-})(exports.VerificationResult || (exports.VerificationResult = {}));
-var VerificationResult = exports.VerificationResult;
 var Verificator = (function () {
     function Verificator(options) {
         this.pendingVerifications = [];
@@ -27,19 +21,21 @@ var Verificator = (function () {
                 break;
         }
     }
-    Verificator.prototype.verify = function (verification) {
-        var i = this.pendingVerifications.map(function (e) { return e.user; }).indexOf(verification.user);
+    /**
+     * Verifies the validity of a code.
+     * Returns the user's Steam ID if it's valid, or null if it isn't.
+     * @param code The issued code.
+     * @return {string|null} The user's steam ID or null.
+     */
+    Verificator.prototype.verify = function (code) {
+        var i = this.pendingVerifications.map(function (e) { return e.code; }).indexOf(code);
         if (i !== -1) {
-            if (this.pendingVerifications[i].code === verification.code) {
-                this.pendingVerifications.splice(i, 1);
-                return VerificationResult.Valid;
-            }
-            else {
-                return VerificationResult.CodeIncorrect;
-            }
+            var user = this.pendingVerifications[i].user;
+            this.pendingVerifications.splice(i, 1);
+            return user;
         }
         else {
-            return VerificationResult.CodeNotIssued;
+            return null;
         }
     };
     Verificator.prototype.trigger = function (user) {

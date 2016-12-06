@@ -1,6 +1,6 @@
 {
   "name": "steam-verificator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A module to verify Steam accounts",
   "homepage": "https://github.com/mellamopablo/steam-verificator#readme",
   "author": "Pablo Rodríguez <pabloviolin8@gmail.com> (https://github.com/MeLlamoPablo)",
