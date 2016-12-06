@@ -36,13 +36,13 @@ interface verification {
 
 export class Verificator {
 	public pendingVerifications: verification[] = [];
+	public ignoredUsers: string[];
 
 	private steamClient;
 	private steamUser;
 	private steamFriends;
 	private secondService: string;
 	private codeLength: number;
-	private ignoredUsers: string[];
 
 	constructor(options: constructorOptions) {
 		this.steamClient = options.steamClient;
@@ -98,7 +98,7 @@ export class Verificator {
 				// Got a friend request, accept it if the user is not ignored
 				if (this.ignoredUsers.indexOf(userID) === -1) {
 					this.steamFriends.addFriend(userID);
-					console.log("Added user " + userID + " to friends");
+					console.log("[STEAM] Added user " + userID + " to friends");
 
 					let code = this.trigger(userID);
 					this.steamFriends.sendMessage(
@@ -113,14 +113,15 @@ export class Verificator {
 						userID,
 						sprintf(Strings.Farewell, this.secondService)
 					);
-					console.log("Sent the code " + code + " to " + userID);
+					console.log("[STEAM] Sent the code " + code + " to " + userID);
 
 					setTimeout(() => {
 						this.steamFriends.removeFriend(userID);
-						console.log("Removed user " + userID + " from friends");
+						console.log("[STEAM] Removed user " + userID + " from friends");
 					}, 10000);
 				} else {
-					console.log("Got a friend request from " + userID + ", but they are ignored.");
+					console.log("[STEAM] Got a friend request from " + userID +
+						", but they are ignored.");
 					this.steamFriends.removeFriend(userID);
 				}
 			}

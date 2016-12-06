@@ -63,19 +63,20 @@ var Verificator = (function () {
                 // Got a friend request, accept it if the user is not ignored
                 if (_this.ignoredUsers.indexOf(userID) === -1) {
                     _this.steamFriends.addFriend(userID);
-                    console.log("Added user " + userID + " to friends");
+                    console.log("[STEAM] Added user " + userID + " to friends");
                     var code = _this.trigger(userID);
                     _this.steamFriends.sendMessage(userID, sprintf(en_1.Strings.Greeting, _this.secondService));
                     _this.steamFriends.sendMessage(userID, sprintf(en_1.Strings.CodeGrant, code));
                     _this.steamFriends.sendMessage(userID, sprintf(en_1.Strings.Farewell, _this.secondService));
-                    console.log("Sent the code " + code + " to " + userID);
+                    console.log("[STEAM] Sent the code " + code + " to " + userID);
                     setTimeout(function () {
                         _this.steamFriends.removeFriend(userID);
-                        console.log("Removed user " + userID + " from friends");
+                        console.log("[STEAM] Removed user " + userID + " from friends");
                     }, 10000);
                 }
                 else {
-                    console.log("Got a friend request from " + userID + ", but they are ignored.");
+                    console.log("[STEAM] Got a friend request from " + userID +
+                        ", but they are ignored.");
                     _this.steamFriends.removeFriend(userID);
                 }
             }
